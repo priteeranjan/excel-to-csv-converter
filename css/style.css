@@ -1,0 +1,17 @@
+body {
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.card {
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+input[type="file"] {
+  background-color: #fff;
+  color: #000;
+}
+
+button {
+  width: 100%;
+}
