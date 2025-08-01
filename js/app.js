@@ -17,12 +17,12 @@ function convertExcel() {
   const reader = new FileReader();
   reader.onload = function (e) {
     const data = new Uint8Array(e.target.result);
-    const workbook = XLSX.read(data, { type: 'array' });
+    const workbook = XLSX.read(data, { type: 'array', cellDates: true });
 
     const sheetName = workbook.SheetNames[0];
     const sheet = workbook.Sheets[sheetName];
 
-    csvOutput = XLSX.utils.sheet_to_csv(sheet);
+    csvOutput = XLSX.utils.sheet_to_csv(sheet, { dateNF: "yyyy-mm-dd" });
 
     document.getElementById('status').textContent = "✅ File converted! You can now download the CSV.";
     document.getElementById('downloadBtn').disabled = false;
@@ -36,7 +36,7 @@ function downloadCSV() {
     return;
   }
 
-  // Use original file name without extension
+  // Keep original file name
   const originalName = selectedFile.name;
   const baseName = originalName.substring(0, originalName.lastIndexOf('.')) || originalName;
 
