@@ -1,9 +1,39 @@
+/* Base page styling */
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
 body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* ensures full height for sticky footer */
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background-color: #121212;
   color: #f5f5f5;
+  margin: 0;
+  padding: 0;
 }
 
+/* Main content area should grow to push footer down */
+.container {
+  background-color: #1e1e1e;
+  border-radius: 0.5rem;
+  padding: 2rem;
+  box-shadow: 0 4px 30px rgba(0,0,0,0.4);
+}
+
+.flex-grow-1 {
+  flex-grow: 1;
+}
+
+/* Header and footer colors */
+.navbar,
+footer {
+  background-color: #1c1c1c !important;
+}
+
+/* Card styling */
 .card {
   background: rgba(44, 47, 51, 0.95);
   border-radius: 1.25rem;
@@ -23,6 +53,7 @@ body {
   font-size: 0.9rem;
 }
 
+/* Buttons */
 button.btn-lg {
   font-size: 1rem;
   padding: 0.75rem 1rem;
@@ -58,6 +89,7 @@ button.btn-lg {
   font-weight: 500;
 }
 
+/* Inline code inside cards */
 .card code {
   color: #fcd34d;
   background-color: rgba(255, 255, 255, 0.05);
@@ -69,6 +101,7 @@ button.btn-lg {
   color: #aaaaaa !important;
 }
 
+/* Dropzone styling */
 .dropzone {
   border: 2px dashed #4a90e2;
   border-radius: 1rem;
@@ -77,9 +110,11 @@ button.btn-lg {
   cursor: pointer;
   background-color: #1e1e1e;
   transition: border-color 0.3s ease, background-color 0.3s ease;
+  transition: transform 0.2s ease, background-color 0.2s ease;
 }
 
 .dropzone:hover {
+   transform: scale(1.01);
   border-color: #357ab8;
   background-color: #262626;
 }
@@ -102,6 +137,7 @@ button.btn-lg {
   margin-top: 0.5rem;
 }
 
+/* Table styling */
 #previewTable th,
 #previewTable td {
   font-size: 0.875rem;
@@ -114,6 +150,14 @@ button.btn-lg {
   overflow: auto;
 }
 
+#previewContainer thead th {
+  position: sticky;
+  top: 0;
+  background-color: #212529;
+  z-index: 2;
+}
+
+/* Responsive adjustments */
 @media (max-width: 576px) {
   .card {
     padding: 1rem;
@@ -133,10 +177,3 @@ button.btn-lg {
     font-size: 0.75rem;
   }
 }
-#previewContainer thead th {
-  position: sticky;
-  top: 0;
-  background-color: #212529;
-  z-index: 2;
-}
-
