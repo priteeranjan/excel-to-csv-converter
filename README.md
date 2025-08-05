@@ -1,60 +1,63 @@
-# 📊 Excel to CSV Converter (Smart Preview & Edit)
+# 📊 SmartSheet Converter
 
-A modern, fully client-side web application to convert Excel files (`.xlsx`, `.xls`, `.xlsm`) into clean, customizable CSV files — with editable tables, real-time filtering, and export control.
+A modern, fully client‑side web application to preview, edit, and convert spreadsheet files (`.xlsx`, `.xls`, `.xlsm`, `.csv`, `.tsv`) into clean, customizable outputs — with inline editing, real‑time search/filtering, column visibility control, and privacy‑first local processing.  
 
 ---
 
 ## 🚀 Features
 
-- 📁 **Upload Excel File** via drag & drop or file picker
-- 📄 **Preview & Select Sheet** from multi-sheet workbooks
-- 🖊️ **Editable Cells** — click any cell to edit inline
-- 🔍 **Search & Highlight** matching rows in real time
-- 🧮 **Column Visibility Toggle** — show/hide columns as needed
-- 📤 **Export Clean CSV** with only visible & edited content
-- 🔄 **Reset Functionality** — clear the table and start fresh
-- 📘 **"How It Works" Modal** to guide new users
-- 💡 Fully **responsive**, mobile-ready, and **dark-themed**
+- 📁 **Upload Files** via drag‑and‑drop or file picker — supports Excel, CSV, and TSV formats  
+- 📄 **Multi‑Sheet Support** — select and work with any sheet in a workbook  
+- 🖊️ **Inline Editing** — click any cell to edit directly in the preview  
+- 🔍 **Real‑Time Search & Highlight** — instantly find and mark matching rows  
+- 🧮 **Column Visibility Toggle** — show/hide columns to customize exports  
+- 📤 **Multi‑Format Export** — CSV, TSV, or Excel with only visible & edited content  
+- 📊 **Live Data Preview** — verify data before downloading  
+- 🔄 **Reset Workspace** — clear the table and start fresh anytime  
+- 📘 **"How It Works" Modal** — guides new users through features  
+- 🌓 **Fully Responsive & Dark‑Themed** — works seamlessly on desktop and mobile  
+- 🔒 **Privacy‑First** — all processing happens locally in your browser; no uploads  
 
 ---
 
 ## 🎯 Project Purpose
 
-The purpose of this project is to offer a lightweight and user-friendly tool to:
-- Convert Excel spreadsheets into editable CSV files
-- Clean, filter, and manipulate tabular data without Excel or external tools
-- Enable fast data preparation directly in the browser — no installation or backend required
+The purpose of SmartSheet Converter is to provide a **fast, flexible, and privacy‑friendly** tool for working with spreadsheets entirely in the browser:  
 
-It streamlines manual data tasks for analysts, testers, and business users handling spreadsheet imports/exports.
+- Convert Excel, CSV, or TSV files into clean, editable formats  
+- Filter, edit, and prepare tabular data without needing Excel or server‑based tools  
+- Enable quick data preparation for analysts, testers, QA engineers, and business teams — without installation or backend dependencies  
+
+This project streamlines data‑handling workflows while ensuring **100% local data processing** for sensitive or confidential files.  
 
 ---
 
 ## 🛠️ Technologies Used
 
-| Layer             | Stack                        |
-|------------------|------------------------------|
-| Core Logic        | **JavaScript (Vanilla)**      |
-| Markup            | **HTML5**                     |
-| Styling           | **CSS3 + Bootstrap 5.3**      |
-| Icons             | **Bootstrap Icons**           |
-| Excel Parsing     | **SheetJS (xlsx.js)** via CDN |
-| Hosting           | **100% Frontend** (no backend needed)
+| Layer             | Stack                         |
+|-------------------|-------------------------------|
+| Core Logic        | **JavaScript (Vanilla)**       |
+| Markup            | **HTML5**                      |
+| Styling           | **CSS3 + Bootstrap 5.3**       |
+| Icons             | **Bootstrap Icons**            |
+| Spreadsheet Parsing| **SheetJS (xlsx.js)** via CDN |
+| Hosting           | **Static Frontend** (no backend needed) |
 
 ---
 
 ## 📦 How to Use
 
-1. Open `index.html` in any modern browser
-2. Drag & drop your Excel file or click to upload
-3. Select the sheet you want to preview
-4. Search, edit, or hide/show columns
-5. Click **Download CSV** to export visible & modified data
+1. Open `index.html` in any modern browser  
+2. Drag & drop your file or click to upload  
+3. Select the sheet you want to work with  
+4. Edit, search, or toggle column visibility  
+5. Click **Download** to export in your chosen format (CSV, TSV, or Excel)  
 
 ---
 
 ## 📁 Folder Structure
 
-EXCEL-TO-CSV-CONVERTER/
+SMARTSHEET-CONVERTER/
 ├── css/
 │   └── style.css
 ├── js/
@@ -66,16 +69,16 @@ EXCEL-TO-CSV-CONVERTER/
 │   └── testrigor-logo.png
 └── index.html
 
-No setup or build steps are required.
+No setup or build steps required — runs directly in the browser.
 
 ---
 
 ## 🔐 License
 
-This project is licensed under a **Custom Internal Use License**:
+This project is licensed under a **Custom Internal Use License**:  
 
-- ✅ Free to use as-is for personal or internal team workflows
-- ❌ Modification, reverse engineering, or redistribution of any part of this tool is not permitted
-- ❌ Resale or commercial distribution is strictly prohibited
+- ✅ Free to use for personal or internal team workflows  
+- ❌ Modification, reverse engineering, or redistribution is not permitted  
+- ❌ Resale or commercial distribution is strictly prohibited  
 
 All rights reserved © Priteeranjan Das, 2025.
