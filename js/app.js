@@ -16,11 +16,16 @@ const searchWrapper = document.getElementById('searchWrapper');
 const columnToggles = document.getElementById('columnToggles');
 const alertBox = document.getElementById('alertBox');
 const downloadBtn = document.getElementById('downloadBtn');
+const formatSelector = document.getElementById('formatSelector');
+const formatWrapper = document.getElementById('formatWrapper');
 
 fileInput.addEventListener('change', e => {
   selectedFile = e.target.files[0];
   clearAlert();
-  if (selectedFile) loadWorkbook(selectedFile);
+  if (selectedFile) {
+    setDownloadFormatBasedOnExtension(selectedFile.name);
+    loadWorkbook(selectedFile);
+  }
 });
 
 dropzone.addEventListener('click', () => fileInput.click());
@@ -40,10 +45,18 @@ dropzone.addEventListener('click', () => fileInput.click());
 );
 
 dropzone.addEventListener('drop', e => {
+  e.preventDefault(); e.stopPropagation();
+  dropzone.classList.remove('dragover');
+
   const file = e.dataTransfer.files[0];
-  if (file && /\.(xlsx|xls|xlsm)$/i.test(file.name)) {
-    selectedFile = file;
-    fileInput.files = e.dataTransfer.files;
+  if (!file) return;
+
+  selectedFile = file;
+  fileInput.files = e.dataTransfer.files;
+  setDownloadFormatBasedOnExtension(file.name);
+
+  const isExcel = /\.(xlsx|xls|xlsm)$/i.test(file.name);
+  if (isExcel) {
     clearAlert();
     loadWorkbook(file);
   } else {
@@ -111,8 +124,14 @@ function convertExcel() {
 
   csvOutput = generateCSV(processed, visibleColumns);
   downloadBtn.disabled = false;
-  downloadBtn.innerHTML = '<i class="bi bi-download"></i> Download CSV';
-  document.getElementById('status').textContent = `✅ "${selectedSheetName}" converted! You can now download the CSV.`;
+  downloadBtn.innerHTML = '<i class="bi bi-download"></i> Download';
+
+  const format = formatSelector.value;
+  const baseName = selectedFile.name.replace(/\.[^/.]+$/, '');
+  const fileName = `${baseName}_${selectedSheetName}_visible.${format}`;
+  document.getElementById('status').textContent = `✅ "${selectedSheetName}" converted! Auto-downloaded as: ${fileName}`;
+
+  // autoDownload();
 }
 
 function renderTable(data, headers) {
@@ -147,7 +166,7 @@ function renderTable(data, headers) {
 
       td.addEventListener('blur', () => {
         updateCSVOutput();
-        downloadBtn.innerHTML = '<i class="bi bi-download"></i> Download Edited CSV <span class="text-success">✅</span>';
+        downloadBtn.innerHTML = '<i class="bi bi-download"></i> Download Edited <span class="text-success">✅</span>';
       });
 
       tr.appendChild(td);
@@ -205,6 +224,15 @@ function generateCSV(data, headers) {
   return rows.join('\n');
 }
 
+function generateDelimited(data, headers, delimiter) {
+  const rows = [headers.join(delimiter)];
+  data.forEach(row => {
+    const line = headers.map(h => `"${(row[h] ?? '').replace(/"/g, '""')}"`).join(delimiter);
+    rows.push(line);
+  });
+  return rows.join('\n');
+}
+
 function getVisibleData() {
   const rows = [];
   const tbody = previewTable.querySelector('tbody');
@@ -233,12 +261,78 @@ function downloadCSV() {
     showAlert("❗ Nothing to download.");
     return;
   }
+
+  const format = document.getElementById('formatSelector').value.toLowerCase();
   const baseName = selectedFile.name.replace(/\.[^/.]+$/, '');
-  const blob = new Blob([csvOutput], { type: 'text/csv;charset=utf-8;' });
-  const link = document.createElement('a');
-  link.href = URL.createObjectURL(blob);
-  link.download = `${baseName}_${sheetSelector.value}_visible.csv`;
-  link.click();
+  const selectedSheet = sheetSelector.value;
+  const fileName = `${baseName}_${selectedSheet}_visible.${format}`;
+  const data = getVisibleData();
+
+  if (format === 'xlsx') {
+    console.log('Exporting as XLSX'); // ✅ Debug message
+    const wb = XLSX.utils.book_new();
+    const ws = XLSX.utils.json_to_sheet(data);
+    XLSX.utils.book_append_sheet(wb, ws, selectedSheet);
+    XLSX.writeFile(wb, fileName);
+  } else {
+    console.log('Exporting as plain text'); // ✅ Debug message
+    const delimiter = format === 'tsv' ? '\t' : ',';
+    const output = generateDelimited(data, visibleColumns, delimiter);
+    const blob = new Blob([output], { type: 'text/plain;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = fileName;
+    link.click();
+  }
+}
+
+
+function autoDownload() {
+  const format = document.getElementById('formatSelector').value.toLowerCase();
+  const baseName = selectedFile.name.replace(/\.[^/.]+$/, '');
+  const selectedSheet = sheetSelector.value;
+  const fileName = `${baseName}_${selectedSheet}_visible.${format}`;
+  const data = getVisibleData();
+
+  if (format === 'xlsx') {
+    const wb = XLSX.utils.book_new();
+    const ws = XLSX.utils.json_to_sheet(data);
+    XLSX.utils.book_append_sheet(wb, ws, selectedSheet);
+    XLSX.writeFile(wb, fileName);
+  } else {
+    const delimiter = format === 'tsv' ? '\t' : ',';
+    const output = generateDelimited(data, visibleColumns, delimiter);
+    const blob = new Blob([output], { type: 'text/plain;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = fileName;
+    link.click();
+  }
+}
+
+
+function setDownloadFormatBasedOnExtension(filename) {
+  const ext = filename.split('.').pop().toLowerCase();
+  formatSelector.innerHTML = '';
+  const hideDropdown = ext === 'csv' || ext === 'tsv';
+
+  if (hideDropdown) {
+    const opt = document.createElement('option');
+    opt.value = ext;
+    opt.textContent = ext.toUpperCase();
+    formatSelector.appendChild(opt);
+    formatWrapper.style.display = 'none';
+  } else {
+    const formats = ['xlsx', 'csv', 'tsv'];
+    formats.forEach(f => {
+      const opt = document.createElement('option');
+      opt.value = f;
+      opt.textContent = f.toUpperCase();
+      formatSelector.appendChild(opt);
+    });
+    formatSelector.value = 'xlsx';
+    formatWrapper.style.display = 'block';
+  }
 }
 
 searchInput.addEventListener('input', function () {
@@ -286,9 +380,10 @@ function resetApp() {
   document.getElementById('sheetSelectorWrapper').style.display = 'none';
   document.getElementById('status').textContent = '';
   downloadBtn.disabled = true;
-  downloadBtn.innerHTML = '<i class="bi bi-download"></i> Download CSV';
+  downloadBtn.innerHTML = '<i class="bi bi-download"></i> Download';
   alertBox.classList.add('d-none');
   searchInput.value = '';
+  formatWrapper.style.display = 'block';
 }
 
 function showAlert(message) {
